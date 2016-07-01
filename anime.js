@@ -31,10 +31,7 @@
     direction: 'normal',
     easing: 'easeOutElastic',
     elasticity: 400,
-    round: false,
-    begin: undefined,
-    update: undefined,
-    complete: undefined
+    round: false
   }
 
   var validTransforms = ['translateX', 'translateY', 'translateZ', 'rotate', 'rotateX', 'rotateY', 'rotateZ', 'scale', 'scaleX', 'scaleY', 'scaleZ', 'skewX', 'skewY'];
@@ -485,7 +482,6 @@
       }
     }
     if (transforms) for (var t in transforms) anim.animatables[t].target.style.transform = transforms[t].join(' ');
-    if (is.func(anim.settings.update)) anim.settings.update(anim);
     if (is.func(anim.updated_resolve)) anim.updated_resolve(anim);
   }
 
@@ -535,7 +531,6 @@
         time.current = time.last + now - time.start;
         var s = anim.settings;
         if (!anim.started && time.current >= s.delay) {
-          if (is.func(s.begin)) s.begin(anim);
           if (is.func(anim.began_resolve)) anim.began_resolve(anim);
           anim.started = true;
         }
@@ -549,7 +544,6 @@
             anim.ended = true;
             anim.pause();
             anim.started = false;
-            if (s.complete) s.complete(anim);
             if (is.func(anim.completed_resolve)) anim.completed_resolve(anim);
           }
           time.last = 0;
@@ -594,17 +588,6 @@
       anim.play();
       return this;
     }
-
-    var callbacks = function(type) {
-      return function(callback) {
-        anim.settings[type] = is.func(callback) ? callback : undefined;
-        return anim;
-      }
-    };
-
-    anim.begin = callbacks('begin');
-    anim.update = callbacks('update');
-    anim.complete = callbacks('complete');
 
     var promise = function(type) {
       if(typeof Promise !== "undefined") {
