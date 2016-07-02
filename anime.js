@@ -550,9 +550,9 @@
             anim.ended = true;
             anim.pause();
             anim.started = false;
-            if (is.func(s.complete)) s.complete(anim);
-            if (is.func(anim.completed_resolve)) anim.completed_resolve(anim);
           }
+          if (is.func(s.complete)) s.complete(anim);
+          if (is.func(anim.completed_resolve)) anim.completed_resolve(anim);
           time.last = 0;
         }
       }
